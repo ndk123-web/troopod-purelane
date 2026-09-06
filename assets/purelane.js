@@ -1,62 +1,76 @@
-/* ============================================================
-   PURELANE SHOPIFY INTERACTIVE JAVASCRIPT
-   Supports AJAX Cart API, Floating Nav Sliding Indicator,
-   Smooth Scroll Spy, Hero multi-stage slider, and reviews rail.
-   ============================================================ */
+/**
+ * Purelane Shopify Dawn Custom Theme Scripts
+ * Full Parallax & Dynamic Scene Architecture
+ */
 
 (function () {
   'use strict';
 
-  // Global Toast Function
+  // Global Toast Notification Helper
   window.PurelaneToast = function (message) {
-    var toast = document.getElementById('plToast');
+    var toast = document.getElementById('purelaneToast');
     if (!toast) {
       toast = document.createElement('div');
-      toast.id = 'plToast';
+      toast.id = 'purelaneToast';
       toast.className = 'pl-toast';
-      toast.setAttribute('role', 'status');
-      toast.setAttribute('aria-live', 'polite');
       document.body.appendChild(toast);
     }
-    toast.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#a4f4cf" stroke-width="2.5" stroke-linecap="round"><path d="m5 13 4 4L19 7"/></svg> ' + message;
+    toast.textContent = message || 'Item added to cart!';
     toast.classList.add('show');
-    clearTimeout(window.plToastTimer);
-    window.plToastTimer = setTimeout(function () {
+    setTimeout(function () {
       toast.classList.remove('show');
-    }, 2800);
+    }, 3200);
   };
 
-  // Global AJAX Add to Cart
-  window.PurelaneAddToCart = function (variantId, productName, buttonEl) {
+  // Global 1-Click AJAX Add to Cart
+  window.PurelaneAddToCart = function (variantId, productTitle, buttonEl) {
     if (!variantId) {
-      console.warn('Purelane: Missing variant ID');
+      window.location.href = '/collections/all';
       return;
     }
-    
-    var origText = buttonEl ? buttonEl.innerHTML : '';
+
+    var origText = '';
     if (buttonEl) {
+      origText = buttonEl.innerHTML;
       buttonEl.setAttribute('disabled', 'true');
-      buttonEl.innerHTML = 'Adding...';
+      buttonEl.innerHTML = '<span class="pl-spinner"></span> Adding...';
     }
 
-    fetch('/cart/add.js', {
+    var formData = {
+      items: [
+        {
+          id: parseInt(variantId, 10),
+          quantity: 1
+        }
+      ]
+    };
+
+    fetch(window.Shopify ? window.Shopify.routes.root + 'cart/add.js' : '/cart/add.js', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ id: variantId, quantity: 1 })
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(formData)
     })
-    .then(function (res) { return res.json(); })
-    .then(function (item) {
+    .then(function (res) {
+      return res.json();
+    })
+    .then(function (data) {
       if (buttonEl) {
         buttonEl.removeAttribute('disabled');
-        buttonEl.innerHTML = origText;
+        buttonEl.innerHTML = 'Added! ✓';
+        setTimeout(function () {
+          buttonEl.innerHTML = origText;
+        }, 1800);
       }
-      window.PurelaneToast('Added ' + (productName || item.title || 'Product') + ' to cart!');
-      
-      // Update Dawn Cart Bubble and Purelane Header Bubble
-      fetch('/cart.js')
-        .then(function (r) { return r.json(); })
+      window.PurelaneToast((productTitle || 'Product') + ' added to your bag!');
+
+      // Update Cart Bubble Count
+      fetch(window.Shopify ? window.Shopify.routes.root + 'cart.js' : '/cart.js')
+        .then(function (res) { return res.json(); })
         .then(function (cart) {
-          var bubbles = document.querySelectorAll('.cart-count-bubble span, #cart-icon-bubble span, .dot, #cartCount');
+          var bubbles = document.querySelectorAll('#cartCount, .cart-count-bubble');
           bubbles.forEach(function (b) {
             b.textContent = cart.item_count;
             b.classList.remove('pop');
@@ -109,13 +123,28 @@
     play();
   }
 
-  // Floating Header Navigation with Sliding Indicator & ScrollSpy
-  function initNav() {
+  // Floating Header, Rail Navigation, and Parallax Scene System
+  function initNavAndScenes() {
     var hdr = document.getElementById('hdr');
     var nav = document.getElementById('mainNav');
     var indicator = document.getElementById('navIndicator');
     var links = nav ? nav.querySelectorAll('.nav-link') : [];
     var railLinks = document.querySelectorAll('.rail a');
+    var scenes = document.querySelectorAll('.scene');
+    var stage = document.getElementById('scenes');
+    var wl = document.querySelectorAll('#water .wl');
+    var currentScene = 0;
+    var rafId = null;
+    var mx = 0, my = 0;
+
+    var sections = [
+      { id: 'hero', name: 'Home', scene: 1 },
+      { id: 'reviews', name: 'Reviews', scene: 2 },
+      { id: 'ingredients', name: 'Ingredients', scene: 2 },
+      { id: 'combos', name: 'Combos', scene: 3 },
+      { id: 'bundles', name: 'Bundles', scene: 3 },
+      { id: 'shop', name: 'Shop', scene: 4 }
+    ];
 
     function moveIndicator(linkEl) {
       if (!nav || !indicator || !linkEl) return;
@@ -126,7 +155,7 @@
       indicator.style.opacity = '1';
     }
 
-    function setActive(activeLink) {
+    function setActiveHeader(activeLink) {
       links.forEach(function (l) { l.classList.remove('active'); });
       if (activeLink) {
         activeLink.classList.add('active');
@@ -134,6 +163,19 @@
       }
     }
 
+    function scrollToSection(targetId) {
+      var target = document.getElementById(targetId) || 
+                   document.querySelector('#' + targetId) || 
+                   document.querySelector('[id^="' + targetId + '"]') || 
+                   document.querySelector('.' + targetId);
+      if (target) {
+        var hdrOffset = 70;
+        var targetPos = target.getBoundingClientRect().top + window.pageYOffset - hdrOffset;
+        window.scrollTo({ top: Math.max(0, targetPos), behavior: 'smooth' });
+      }
+    }
+
+    // Top Header Nav Click Listeners
     if (links.length > 0) {
       var initialActive = nav.querySelector('.nav-link.active') || links[0];
       setTimeout(function () { moveIndicator(initialActive); }, 150);
@@ -145,16 +187,8 @@
           if (href && href.startsWith('#')) {
             e.preventDefault();
             var targetId = href.replace('#', '');
-            var target = document.getElementById(targetId) || 
-                         document.querySelector(href) || 
-                         document.querySelector('[id^="' + targetId + '"]') || 
-                         document.querySelector('.' + targetId);
-            if (target) {
-              var hdrOffset = 80;
-              var targetPos = target.getBoundingClientRect().top + window.pageYOffset - hdrOffset;
-              window.scrollTo({ top: Math.max(0, targetPos), behavior: 'smooth' });
-              setActive(this);
-            }
+            scrollToSection(targetId);
+            setActiveHeader(this);
           }
         });
       });
@@ -165,36 +199,96 @@
       });
     }
 
-    // Scroll Header compact & ScrollSpy active links
-    var sections = [
-      { id: 'hero', link: nav ? nav.querySelector('a[href="#hero"]') : null },
-      { id: 'reviews', link: nav ? nav.querySelector('a[href="#reviews"]') : null },
-      { id: 'ingredients', link: nav ? nav.querySelector('a[href="#ingredients"]') : null },
-      { id: 'combos', link: nav ? nav.querySelector('a[href="#combos"]') : null },
-      { id: 'bundles', link: nav ? nav.querySelector('a[href="#bundles"]') : null },
-      { id: 'shop', link: nav ? nav.querySelector('a[href="#shop"]') : null }
-    ];
+    // Desktop Side Rail Click Listeners
+    railLinks.forEach(function (railLink) {
+      railLink.addEventListener('click', function (e) {
+        var href = this.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          e.preventDefault();
+          var targetId = href.replace('#', '');
+          scrollToSection(targetId);
+        }
+      });
+    });
 
-    window.addEventListener('scroll', function () {
+    // Scene switching with smooth transitions
+    function setScene(n) {
+      if (n === currentScene) return;
+      currentScene = n;
+      scenes.forEach(function (s, i) {
+        s.classList.toggle('on', i + 1 === n);
+      });
+      if (stage) stage.setAttribute('data-d', String(n));
+    }
+
+    // High performance RAF frame render loop
+    function renderFrame() {
+      rafId = null;
       var y = window.scrollY || window.pageYOffset;
+
+      // Header compact gliding
       if (hdr) hdr.classList.toggle('up', y > 40);
 
-      // Sync active section link
-      var scrollPos = y + window.innerHeight * 0.35;
-      for (var i = sections.length - 1; i >= 0; i--) {
-        var secId = sections[i].id;
-        var sec = document.getElementById(secId) || document.querySelector('[id^="' + secId + '"]') || document.querySelector('.' + secId);
-        if (sec && sec.offsetTop <= scrollPos) {
-          if (sections[i].link && !sections[i].link.classList.contains('active')) {
-            setActive(sections[i].link);
-          }
-          if (railLinks[i]) {
-            railLinks.forEach(function (r, idx) { r.classList.toggle('on', idx === i); });
-          }
-          break;
+      // Parallax caustics movement
+      if (wl.length > 0) {
+        var depthMultipliers = [0.04, 0.08, 0.03, 0.02];
+        for (var k = 0; k < wl.length; k++) {
+          var d = depthMultipliers[k] || 0.04;
+          wl[k].style.setProperty('--px', (mx * d * 100).toFixed(1) + 'px');
+          wl[k].style.setProperty('--py', (-y * d + my * d * 60).toFixed(1) + 'px');
         }
       }
-    }, { passive: true });
+
+      // ScrollSync for Rail & Header & Scenes
+      var scrollFocus = y + window.innerHeight * 0.38;
+      var activeIdx = 0;
+
+      for (var i = 0; i < sections.length; i++) {
+        var secEl = document.getElementById(sections[i].id) || 
+                     document.querySelector('#' + sections[i].id) || 
+                     document.querySelector('[id^="' + sections[i].id + '"]');
+        if (secEl) {
+          var top = secEl.offsetTop;
+          if (top <= scrollFocus) {
+            activeIdx = i;
+          }
+        }
+      }
+
+      // Sync rail pills
+      railLinks.forEach(function (r, idx) {
+        r.classList.toggle('on', idx === activeIdx);
+      });
+
+      // Sync header navigation link
+      if (links[activeIdx] && !links[activeIdx].classList.contains('active')) {
+        setActiveHeader(links[activeIdx]);
+      }
+
+      // Sync backdrop scene depth (1 to 4)
+      if (sections[activeIdx]) {
+        setScene(sections[activeIdx].scene);
+      }
+    }
+
+    function scheduleFrame() {
+      if (!rafId) rafId = requestAnimationFrame(renderFrame);
+    }
+
+    window.addEventListener('scroll', scheduleFrame, { passive: true });
+    window.addEventListener('resize', scheduleFrame, { passive: true });
+
+    // Interactive mouse movement for ambient liquid caustics
+    if (window.matchMedia('(min-width: 1024px)').matches) {
+      window.addEventListener('mousemove', function (e) {
+        mx = (e.clientX / window.innerWidth - 0.5) * 2;
+        my = (e.clientY / window.innerHeight - 0.5) * 2;
+        scheduleFrame();
+      }, { passive: true });
+    }
+
+    // Trigger first frame
+    scheduleFrame();
 
     // Mobile Navigation Drawer
     var burgerBtn = document.getElementById('burgerBtn');
@@ -229,15 +323,7 @@
           e.preventDefault();
           closeMenu();
           var targetId = href.replace('#', '');
-          var target = document.getElementById(targetId) || 
-                       document.querySelector(href) || 
-                       document.querySelector('[id^="' + targetId + '"]') || 
-                       document.querySelector('.' + targetId);
-          if (target) {
-            var hdrOffset = 80;
-            var targetPos = target.getBoundingClientRect().top + window.pageYOffset - hdrOffset;
-            window.scrollTo({ top: Math.max(0, targetPos), behavior: 'smooth' });
-          }
+          scrollToSection(targetId);
         }
       });
     });
@@ -258,14 +344,14 @@
 
   // Initialize on DOM load
   document.addEventListener('DOMContentLoaded', function () {
-    initNav();
+    initNavAndScenes();
     initHero();
     bindCartButtons();
   });
 
   // Shopify Theme Customizer Lifecycle Hooks
   document.addEventListener('shopify:section:load', function (e) {
-    initNav();
+    initNavAndScenes();
     initHero(e.target);
     bindCartButtons(e.target);
   });

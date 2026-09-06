@@ -390,7 +390,7 @@ header.pl-hdr.up { top: 14px; }
 /* ---------- DESKTOP SIDE PROGRESS RAIL ---------- */
 .rail {
   position: fixed;
-  right: 14px;
+  right: 16px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 44;
@@ -403,9 +403,14 @@ header.pl-hdr.up { top: 14px; }
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(0, 112, 106, 0.24);
+  background: rgba(0, 112, 106, 0.28);
   transition: all 0.3s var(--ease);
   position: relative;
+  cursor: pointer;
+}
+.rail a:hover {
+  background: var(--brand);
+  box-shadow: 0 0 0 3px rgba(0, 112, 106, 0.2);
 }
 .rail a.on {
   background: var(--accent);
