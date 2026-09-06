@@ -586,13 +586,13 @@ header.pl-hdr.up { top: 14px; }
 .p-eraser { background-image: var(--p-eraser) !important; aspect-ratio: 1.3187; }
 .p-floor { background-image: var(--p-floor) !important; aspect-ratio: 0.6312; }
 .p-handwash { background-image: var(--p-handwash) !important; aspect-ratio: 0.7453; }
-.p-kbtl { background-image: var(--p-kbtl) !important; aspect-ratio: 0.3229; }
+.p-kbtl { background-image: var(--p-kbtl) !important; aspect-ratio: 0.3229; min-width: 100px; min-height: 260px; }
 .p-kitchen { background-image: var(--p-kitchen) !important; aspect-ratio: 0.6387; }
 .p-laundry { background-image: var(--p-laundry) !important; aspect-ratio: 0.6302; }
-.p-mbtl { background-image: var(--p-mbtl) !important; aspect-ratio: 0.3416; }
+.p-mbtl { background-image: var(--p-mbtl) !important; aspect-ratio: 0.3416; min-width: 100px; min-height: 260px; }
 .p-metal { background-image: var(--p-metal) !important; aspect-ratio: 0.6993; }
 .p-tap { background-image: var(--p-tap) !important; aspect-ratio: 0.6387; }
-.p-tbtl { background-image: var(--p-tbtl) !important; aspect-ratio: 0.322; }
+.p-tbtl { background-image: var(--p-tbtl) !important; aspect-ratio: 0.322; min-width: 100px; min-height: 260px; }
 .p-toilet { background-image: var(--p-toilet) !important; aspect-ratio: 0.6139; }
 .p-wm { background-image: var(--p-wm) !important; aspect-ratio: 0.6148; }
 
@@ -653,7 +653,6 @@ header.pl-hdr.up { top: 14px; }
 .hp {
   position: relative;
   display: block !important;
-  width: auto !important;
   flex: 0 0 auto;
   background-repeat: no-repeat;
   background-position: center bottom;
@@ -663,17 +662,21 @@ header.pl-hdr.up { top: 14px; }
   transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
   filter: drop-shadow(0 14px 22px rgba(0, 74, 66, 0.16));
 }
+.hp-img {
+  object-fit: contain;
+  object-position: bottom center;
+}
 .hslide.on .hp { opacity: 1; transform: none; }
 .hslide.on .hp.d1 { transition-delay: 0.06s; }
 .hslide.on .hp.d2 { transition-delay: 0.28s; }
 .hslide.on .hp.d3 { transition-delay: 0.50s; }
 
-.hs1 .a { height: 100%; z-index: 3; }
-.hs2 .a { height: 80%; margin-right: -8%; z-index: 1; }
-.hs2 .b { height: 97%; z-index: 3; }
-.hs3 .a { height: 75%; margin-right: -8%; z-index: 1; order: 1; }
-.hs3 .c { height: 97%; z-index: 3; order: 2; }
-.hs3 .b { height: 79%; margin-left: -8%; z-index: 2; order: 3; }
+.hs1 .a { height: 100%; width: auto; min-width: 140px; max-width: 250px; z-index: 3; }
+.hs2 .a { height: 82%; width: auto; min-width: 110px; max-width: 190px; margin-right: -8%; z-index: 1; }
+.hs2 .b { height: 97%; width: auto; min-width: 130px; max-width: 230px; z-index: 3; }
+.hs3 .a { height: 76%; width: auto; min-width: 100px; max-width: 170px; margin-right: -8%; z-index: 1; order: 1; }
+.hs3 .c { height: 97%; width: auto; min-width: 130px; max-width: 230px; z-index: 3; order: 2; }
+.hs3 .b { height: 80%; width: auto; min-width: 110px; max-width: 190px; margin-left: -8%; z-index: 2; order: 3; }
 
 .ptag {
   position: absolute;

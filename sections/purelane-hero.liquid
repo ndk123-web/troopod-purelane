@@ -1,34 +1,43 @@
-{{ 'purelane.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'purelane.js' | asset_url }}" defer></script>
+{%- comment -%}
+  Purelane Hero Section (01. Hero)
+  Multi-Stage Interactive Bottle Showcase with Real Shopify Data & Graceful Fallback
+{%- endcomment -%}
 
-<section class="hero purelane-section" id="hero" aria-labelledby="hero-heading-{{ section.id }}">
-  <div class="pl-wrap hero-grid">
-    
-    <!-- Brand Promises (Desktop Sidebar) -->
-    <aside class="badges pl-glass-2" aria-label="Brand Promises">
-      <div class="badge">
+{%- assign p1 = section.settings.product_1 | default: all_products['purelane-foaming-kitchen-cleaner'] -%}
+{%- assign p2_a = section.settings.product_2_a | default: all_products['purelane-tap-cleaner'] -%}
+{%- assign p2_b = section.settings.product_2_b | default: all_products['purelane-foaming-kitchen-cleaner'] -%}
+{%- assign p3_a = section.settings.product_3_a | default: all_products['purelane-tap-cleaner'] -%}
+{%- assign p3_b = section.settings.product_3_b | default: all_products['purelane-copper-brass-cleaner'] -%}
+{%- assign p3_c = section.settings.product_3_c | default: all_products['purelane-foaming-kitchen-cleaner'] -%}
+
+<section class="pl-hero hero" id="hero" data-scene="1" aria-labelledby="hero-title">
+  <div class="hero-grid">
+
+    <!-- Left Brand Pillars Badges -->
+    <aside class="hero-badges pl-glass-2" aria-label="Key Brand Promises">
+      <div class="h-badge">
         <span class="bi" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21c0-6.5 3.5-11 8-12.5C20 15 16.5 20 12 21Z"/><path d="M12 21C12 14.5 8.5 10 4 8.5 4 15 7.5 20 12 21Z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c0-6.5 3.5-11 8-12.5C20 15 16.5 20 12 21Z"/><path d="M12 21C12 14.5 8.5 10 4 8.5 4 15 7.5 20 12 21Z"/></svg>
         </span>
         <span>Plant<br>powered</span>
       </div>
-      <div class="badge">
+      <div class="h-badge">
         <span class="bi" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3 4.5 6v6.2c0 4.3 3.1 7.6 7.5 8.8 4.4-1.2 7.5-4.5 7.5-8.8V6L12 3Z"/><path d="m9 12 2.2 2.2L15.4 10"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v6.2c0 4.3 3.1 7.6 7.5 8.8 4.4-1.2 7.5-4.5 7.5-8.8V6L12 3Z"/><path d="m9 12 2.2 2.2L15.4 10"/></svg>
         </span>
         <span>Safe for<br>kids &amp; pets</span>
       </div>
-      <div class="badge">
+      <div class="h-badge">
         <span class="bi" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.4"/><path d="M6.4 17.6 17.6 6.4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.4"/><path d="M6.4 17.6 17.6 6.4"/></svg>
         </span>
         <span>Zero harsh<br>chemicals</span>
       </div>
     </aside>
 
-    <!-- Hero Copy & Text -->
+    <!-- Main Hero Headlines & CTA -->
     <div class="hero-copy">
-      <h1 class="pl-d1" id="hero-heading-{{ section.id }}">
+      <h1 class="pl-d1" id="hero-title">
         {{ section.settings.heading | default: 'Clean<br>That<br><span class="pl-lime">Lasts</span>' }}
       </h1>
       <div class="pl-rule" aria-hidden="true">
@@ -74,28 +83,66 @@
       <div class="hstage" id="hstage">
         <!-- Stage 1 (1 Bottle) -->
         <div class="hslide hs1 on" data-n="1">
-          <span class="hp p-kbtl a d1" role="img" aria-label="Purelane foaming kitchen cleaner"></span>
+          {%- if p1 != blank and p1.featured_image != blank -%}
+            <img class="hp hp-img a d1" src="{{ p1.featured_image | image_url: width: 600 }}" alt="{{ p1.title | escape }}" loading="eager" width="220" height="440">
+          {%- else -%}
+            <span class="hp p-kbtl a d1" role="img" aria-label="Purelane foaming kitchen cleaner"></span>
+          {%- endif -%}
           <div class="pl-glass-2 ptag">
             <span class="lbl">{{ section.settings.stage_1_label | default: 'Single bottle' }}</span>
-            <span class="val"><strong>{{ section.settings.stage_1_price | default: '₹200' }}</strong><s>{{ section.settings.stage_1_compare | default: '₹299' }}</s></span>
+            <span class="val">
+              <strong>
+                {%- if p1 != blank -%}{{ p1.price | money }}{%- else -%}{{ section.settings.stage_1_price | default: '₹200' }}{%- endif -%}
+              </strong>
+              <s>
+                {%- if p1 != blank and p1.compare_at_price > p1.price -%}{{ p1.compare_at_price | money }}{%- else -%}{{ section.settings.stage_1_compare | default: '₹299' }}{%- endif -%}
+              </s>
+            </span>
             <span class="cut">{{ section.settings.stage_1_discount | default: '33% off' }}</span>
           </div>
         </div>
+
         <!-- Stage 2 (2 Bottles) -->
         <div class="hslide hs2" data-n="2">
-          <span class="hp p-tbtl a d1" role="img" aria-label="Purelane tap cleaner"></span>
-          <span class="hp p-kbtl b d2" role="img" aria-label="Purelane kitchen cleaner"></span>
+          {%- if p2_a != blank and p2_a.featured_image != blank -%}
+            <img class="hp hp-img a d1" src="{{ p2_a.featured_image | image_url: width: 500 }}" alt="{{ p2_a.title | escape }}" loading="lazy" width="180" height="380">
+          {%- else -%}
+            <span class="hp p-tbtl a d1" role="img" aria-label="Purelane tap cleaner"></span>
+          {%- endif -%}
+
+          {%- if p2_b != blank and p2_b.featured_image != blank -%}
+            <img class="hp hp-img b d2" src="{{ p2_b.featured_image | image_url: width: 600 }}" alt="{{ p2_b.title | escape }}" loading="lazy" width="210" height="420">
+          {%- else -%}
+            <span class="hp p-kbtl b d2" role="img" aria-label="Purelane kitchen cleaner"></span>
+          {%- endif -%}
+
           <div class="pl-glass-2 ptag">
             <span class="lbl">{{ section.settings.stage_2_label | default: 'Any 2 products' }}</span>
             <span class="val"><strong>{{ section.settings.stage_2_price | default: '₹349' }}</strong><s>{{ section.settings.stage_2_compare | default: '₹598' }}</s></span>
             <span class="cut">{{ section.settings.stage_2_discount | default: 'Save ₹249' }}</span>
           </div>
         </div>
+
         <!-- Stage 3 (3 Bottles) -->
         <div class="hslide hs3" data-n="3">
-          <span class="hp p-tbtl a d1" role="img" aria-label="Purelane tap cleaner"></span>
-          <span class="hp p-mbtl b d2" role="img" aria-label="Purelane copper cleaner"></span>
-          <span class="hp p-kbtl c d3" role="img" aria-label="Purelane kitchen cleaner"></span>
+          {%- if p3_a != blank and p3_a.featured_image != blank -%}
+            <img class="hp hp-img a d1" src="{{ p3_a.featured_image | image_url: width: 500 }}" alt="{{ p3_a.title | escape }}" loading="lazy" width="170" height="360">
+          {%- else -%}
+            <span class="hp p-tbtl a d1" role="img" aria-label="Purelane tap cleaner"></span>
+          {%- endif -%}
+
+          {%- if p3_c != blank and p3_c.featured_image != blank -%}
+            <img class="hp hp-img c d3" src="{{ p3_c.featured_image | image_url: width: 600 }}" alt="{{ p3_c.title | escape }}" loading="lazy" width="210" height="420">
+          {%- else -%}
+            <span class="hp p-kbtl c d3" role="img" aria-label="Purelane kitchen cleaner"></span>
+          {%- endif -%}
+
+          {%- if p3_b != blank and p3_b.featured_image != blank -%}
+            <img class="hp hp-img b d2" src="{{ p3_b.featured_image | image_url: width: 500 }}" alt="{{ p3_b.title | escape }}" loading="lazy" width="180" height="370">
+          {%- else -%}
+            <span class="hp p-mbtl b d2" role="img" aria-label="Purelane copper cleaner"></span>
+          {%- endif -%}
+
           <div class="pl-glass-2 ptag">
             <span class="lbl">{{ section.settings.stage_3_label | default: 'Any 3 products' }}</span>
             <span class="val"><strong>{{ section.settings.stage_3_price | default: '₹499' }}</strong><s>{{ section.settings.stage_3_compare | default: '₹897' }}</s></span>
@@ -105,7 +152,7 @@
       </div>
       
       <!-- Stage Navigation Dots -->
-      <div class="hdots" role="tablist" aria-label="Hero slider tabs">
+      <div class="hdots" id="hdots" role="tablist" aria-label="Hero slider tabs">
         <button type="button" class="on" role="tab" aria-selected="true" aria-label="Show 1 product"></button>
         <button type="button" class="" role="tab" aria-selected="false" aria-label="Show 2 products"></button>
         <button type="button" class="" role="tab" aria-selected="false" aria-label="Show 3 products"></button>
@@ -158,7 +205,12 @@
     },
     {
       "type": "header",
-      "content": "Stage 1 Settings"
+      "content": "Stage 1 (Single Bottle)"
+    },
+    {
+      "type": "product",
+      "id": "product_1",
+      "label": "Product 1"
     },
     {
       "type": "text",
@@ -186,7 +238,17 @@
     },
     {
       "type": "header",
-      "content": "Stage 2 Settings"
+      "content": "Stage 2 (2 Products)"
+    },
+    {
+      "type": "product",
+      "id": "product_2_a",
+      "label": "Product 2 - Bottle A"
+    },
+    {
+      "type": "product",
+      "id": "product_2_b",
+      "label": "Product 2 - Bottle B"
     },
     {
       "type": "text",
@@ -214,7 +276,22 @@
     },
     {
       "type": "header",
-      "content": "Stage 3 Settings"
+      "content": "Stage 3 (3 Products)"
+    },
+    {
+      "type": "product",
+      "id": "product_3_a",
+      "label": "Product 3 - Bottle A"
+    },
+    {
+      "type": "product",
+      "id": "product_3_b",
+      "label": "Product 3 - Bottle B"
+    },
+    {
+      "type": "product",
+      "id": "product_3_c",
+      "label": "Product 3 - Bottle C"
     },
     {
       "type": "text",
