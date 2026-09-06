@@ -1,6 +1,6 @@
 {%- comment -%}
   Purelane Hero Section (01. Hero)
-  Multi-Stage Interactive Bottle Showcase with Real Shopify Data & Graceful Fallback
+  Multi-Stage Interactive Bottle Showcase with Real Shopify Data & Verified Botanical Artwork Fallback
 {%- endcomment -%}
 
 {%- assign p1 = section.settings.product_1 | default: all_products['purelane-foaming-kitchen-cleaner'] -%}
@@ -86,7 +86,7 @@
           {%- if p1 != blank and p1.featured_image != blank -%}
             <img class="hp hp-img a d1" src="{{ p1.featured_image | image_url: width: 600 }}" alt="{{ p1.title | escape }}" loading="eager" width="220" height="440">
           {%- else -%}
-            <span class="hp p-kbtl a d1" role="img" aria-label="Purelane foaming kitchen cleaner"></span>
+            <span class="hp pimg p-kitchen a d1" role="img" aria-label="Purelane foaming kitchen cleaner"></span>
           {%- endif -%}
           <div class="pl-glass-2 ptag">
             <span class="lbl">{{ section.settings.stage_1_label | default: 'Single bottle' }}</span>
@@ -107,13 +107,13 @@
           {%- if p2_a != blank and p2_a.featured_image != blank -%}
             <img class="hp hp-img a d1" src="{{ p2_a.featured_image | image_url: width: 500 }}" alt="{{ p2_a.title | escape }}" loading="lazy" width="180" height="380">
           {%- else -%}
-            <span class="hp p-tbtl a d1" role="img" aria-label="Purelane tap cleaner"></span>
+            <span class="hp pimg p-tap a d1" role="img" aria-label="Purelane tap cleaner"></span>
           {%- endif -%}
 
           {%- if p2_b != blank and p2_b.featured_image != blank -%}
             <img class="hp hp-img b d2" src="{{ p2_b.featured_image | image_url: width: 600 }}" alt="{{ p2_b.title | escape }}" loading="lazy" width="210" height="420">
           {%- else -%}
-            <span class="hp p-kbtl b d2" role="img" aria-label="Purelane kitchen cleaner"></span>
+            <span class="hp pimg p-kitchen b d2" role="img" aria-label="Purelane kitchen cleaner"></span>
           {%- endif -%}
 
           <div class="pl-glass-2 ptag">
@@ -128,19 +128,19 @@
           {%- if p3_a != blank and p3_a.featured_image != blank -%}
             <img class="hp hp-img a d1" src="{{ p3_a.featured_image | image_url: width: 500 }}" alt="{{ p3_a.title | escape }}" loading="lazy" width="170" height="360">
           {%- else -%}
-            <span class="hp p-tbtl a d1" role="img" aria-label="Purelane tap cleaner"></span>
+            <span class="hp pimg p-tap a d1" role="img" aria-label="Purelane tap cleaner"></span>
           {%- endif -%}
 
           {%- if p3_c != blank and p3_c.featured_image != blank -%}
             <img class="hp hp-img c d3" src="{{ p3_c.featured_image | image_url: width: 600 }}" alt="{{ p3_c.title | escape }}" loading="lazy" width="210" height="420">
           {%- else -%}
-            <span class="hp p-kbtl c d3" role="img" aria-label="Purelane kitchen cleaner"></span>
+            <span class="hp pimg p-kitchen c d3" role="img" aria-label="Purelane kitchen cleaner"></span>
           {%- endif -%}
 
           {%- if p3_b != blank and p3_b.featured_image != blank -%}
             <img class="hp hp-img b d2" src="{{ p3_b.featured_image | image_url: width: 500 }}" alt="{{ p3_b.title | escape }}" loading="lazy" width="180" height="370">
           {%- else -%}
-            <span class="hp p-mbtl b d2" role="img" aria-label="Purelane copper cleaner"></span>
+            <span class="hp pimg p-metal b d2" role="img" aria-label="Purelane copper cleaner"></span>
           {%- endif -%}
 
           <div class="pl-glass-2 ptag">
