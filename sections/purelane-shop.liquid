@@ -1,7 +1,7 @@
 {{ 'purelane.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'purelane.js' | asset_url }}" defer></script>
 
-<section class="sec purelane-section" id="shop-{{ section.id }}" aria-labelledby="shop-h-{{ section.id }}">
+<section class="sec purelane-section" id="shop" aria-labelledby="shop-h-{{ section.id }}">
   <div class="pl-wrap">
     <div class="pl-panel-head" style="text-align:center;margin-bottom:26px;">
       <span class="pl-kicker">{{ section.settings.kicker | default: 'Bestsellers' }}</span>

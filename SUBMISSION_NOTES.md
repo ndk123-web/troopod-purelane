@@ -9,8 +9,8 @@
 
 ## 🔗 Deliverables Checklist
 
-1. **Development Store URL**: `https://[your-dev-store].myshopify.com`
-   * **Storefront Password**: `[your-storefront-password]`
+1. **Development Store URL**: `https://dq15xu-0f.myshopify.com/`
+   * **Storefront Password**: `purelane` (or your dev password)
 2. **GitHub Repository**: `https://github.com/[your-username]/purelane-shopify-dawn` (Commit history intact)
 3. **Core Sections Shipped**:
    * ✅ `Hero` (`sections/purelane-hero.liquid`) — 1/2/3 stage product switcher with responsive layout & discount tags.

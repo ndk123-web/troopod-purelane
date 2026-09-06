@@ -103,6 +103,12 @@
         "homes_count": "12 lakh+"
       }
     },
+    "ingredients": {
+      "type": "purelane-ingredients",
+      "settings": {
+        "heading": "Sourced from nature"
+      }
+    },
     "combos": {
       "type": "purelane-combos",
       "settings": {
@@ -134,6 +140,7 @@
     "header",
     "hero",
     "reviews",
+    "ingredients",
     "combos",
     "bundles",
     "shop"

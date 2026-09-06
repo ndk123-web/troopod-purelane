@@ -144,9 +144,15 @@
           var href = this.getAttribute('href');
           if (href && href.startsWith('#')) {
             e.preventDefault();
-            var target = document.querySelector(href);
+            var targetId = href.replace('#', '');
+            var target = document.getElementById(targetId) || 
+                         document.querySelector(href) || 
+                         document.querySelector('[id^="' + targetId + '"]') || 
+                         document.querySelector('.' + targetId);
             if (target) {
-              target.scrollIntoView({ behavior: 'smooth' });
+              var hdrOffset = 80;
+              var targetPos = target.getBoundingClientRect().top + window.pageYOffset - hdrOffset;
+              window.scrollTo({ top: Math.max(0, targetPos), behavior: 'smooth' });
               setActive(this);
             }
           }
@@ -163,6 +169,7 @@
     var sections = [
       { id: 'hero', link: nav ? nav.querySelector('a[href="#hero"]') : null },
       { id: 'reviews', link: nav ? nav.querySelector('a[href="#reviews"]') : null },
+      { id: 'ingredients', link: nav ? nav.querySelector('a[href="#ingredients"]') : null },
       { id: 'combos', link: nav ? nav.querySelector('a[href="#combos"]') : null },
       { id: 'bundles', link: nav ? nav.querySelector('a[href="#bundles"]') : null },
       { id: 'shop', link: nav ? nav.querySelector('a[href="#shop"]') : null }
@@ -170,12 +177,13 @@
 
     window.addEventListener('scroll', function () {
       var y = window.scrollY || window.pageYOffset;
-      if (hdr) hdr.classList.toggle('up', y > 70);
+      if (hdr) hdr.classList.toggle('up', y > 40);
 
       // Sync active section link
       var scrollPos = y + window.innerHeight * 0.35;
       for (var i = sections.length - 1; i >= 0; i--) {
-        var sec = document.getElementById(sections[i].id);
+        var secId = sections[i].id;
+        var sec = document.getElementById(secId) || document.querySelector('[id^="' + secId + '"]') || document.querySelector('.' + secId);
         if (sec && sec.offsetTop <= scrollPos) {
           if (sections[i].link && !sections[i].link.classList.contains('active')) {
             setActive(sections[i].link);
@@ -220,8 +228,16 @@
         if (href && href.startsWith('#')) {
           e.preventDefault();
           closeMenu();
-          var target = document.querySelector(href);
-          if (target) target.scrollIntoView({ behavior: 'smooth' });
+          var targetId = href.replace('#', '');
+          var target = document.getElementById(targetId) || 
+                       document.querySelector(href) || 
+                       document.querySelector('[id^="' + targetId + '"]') || 
+                       document.querySelector('.' + targetId);
+          if (target) {
+            var hdrOffset = 80;
+            var targetPos = target.getBoundingClientRect().top + window.pageYOffset - hdrOffset;
+            window.scrollTo({ top: Math.max(0, targetPos), behavior: 'smooth' });
+          }
         }
       });
     });
