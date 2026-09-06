@@ -671,12 +671,12 @@ header.pl-hdr.up { top: 14px; }
 .hslide.on .hp.d2 { transition-delay: 0.28s; }
 .hslide.on .hp.d3 { transition-delay: 0.50s; }
 
-.hs1 .a { height: 100%; width: auto; min-width: 140px; max-width: 250px; z-index: 3; }
-.hs2 .a { height: 82%; width: auto; min-width: 110px; max-width: 190px; margin-right: -8%; z-index: 1; }
-.hs2 .b { height: 97%; width: auto; min-width: 130px; max-width: 230px; z-index: 3; }
-.hs3 .a { height: 76%; width: auto; min-width: 100px; max-width: 170px; margin-right: -8%; z-index: 1; order: 1; }
-.hs3 .c { height: 97%; width: auto; min-width: 130px; max-width: 230px; z-index: 3; order: 2; }
-.hs3 .b { height: 80%; width: auto; min-width: 110px; max-width: 190px; margin-left: -8%; z-index: 2; order: 3; }
+.hs1 .a { height: 100%; width: 180px; min-width: 150px; max-width: 250px; z-index: 3; }
+.hs2 .a { height: 82%; width: 145px; min-width: 120px; max-width: 190px; margin-right: -45px; z-index: 1; }
+.hs2 .b { height: 97%; width: 180px; min-width: 150px; max-width: 230px; z-index: 3; }
+.hs3 .a { height: 76%; width: 135px; min-width: 110px; max-width: 170px; margin-right: -40px; z-index: 1; order: 1; }
+.hs3 .c { height: 97%; width: 180px; min-width: 150px; max-width: 230px; z-index: 3; order: 2; }
+.hs3 .b { height: 80%; width: 145px; min-width: 120px; max-width: 190px; margin-left: -40px; z-index: 2; order: 3; }
 
 .ptag {
   position: absolute;
