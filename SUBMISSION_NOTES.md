@@ -1,17 +1,17 @@
 # Purelane Build Assignment - Submission Notes
 
-Candidate: Navnath
+Candidate: Navnath Kadam
 Role: AI Product Engineer
 Submission: nj@troopod.io (cc: rahul.bhola@pushstart.in)
-Subject: AI Product Engineer Assignment - Navnath
+Subject: AI Product Engineer Assignment - Navnath Kadam
 
 ---
 
 ## 1. Project Overview & Deliverables
 
 - Development Store URL: https://dq15xu-0f.myshopify.com/
-- Storefront Password: purelane (or your set password)
-- GitHub Repository: https://github.com/[your-username]/purelane-shopify-dawn
+- Storefront Password: purelane123
+- GitHub Repository: https://github.com/ndk123-web/troopod-purelane
 
 ### Sections Shipped:
 1. Hero (`sections/purelane-hero.liquid`): 1, 2, and 3-stage interactive bottle showcase with live Shopify product data, dynamic pricing, and fallback vector assets.
