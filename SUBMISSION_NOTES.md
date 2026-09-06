@@ -1,29 +1,31 @@
-# 📬 Troopod AI Product Engineer — Build Assignment Submission
+# Purelane Build Assignment - Submission Notes
 
-**Candidate Name**: Navnath  
-**Role**: AI Product Engineer  
-**Submission Email**: nj@troopod.io (cc rahul.bhola@pushstart.in)  
-**Subject**: `AI Product Engineer Assignment - Navnath`  
-
----
-
-## 🔗 Deliverables Checklist
-
-1. **Development Store URL**: `https://dq15xu-0f.myshopify.com/`
-   * **Storefront Password**: `purelane` (or your dev password)
-2. **GitHub Repository**: `https://github.com/[your-username]/purelane-shopify-dawn` (Commit history intact)
-3. **Core Sections Shipped**:
-   * ✅ `Hero` (`sections/purelane-hero.liquid`) — 1/2/3 stage product switcher with responsive layout & discount tags.
-   * ✅ `Reviews Rail` (`sections/purelane-reviews.liquid`) — Accessible, continuous marquee with merchant testimonial blocks.
-   * ✅ `Best-Selling Combos` (`sections/purelane-combos.liquid`) — Mobile-friendly horizontal snap rail with 1-click cart add.
-   * ✅ `Bundles Tiers` (`sections/purelane-bundles.liquid`) — 3-tier value boxes with discount calculation & feature bullets.
-   * ✅ `Shop Product Grid` (`sections/purelane-shop.liquid`) — Dynamic Shopify collection grid powered by reusable card snippets (`snippets/purelane-card.liquid`).
+Candidate: Navnath
+Role: AI Product Engineer
+Submission: nj@troopod.io (cc: rahul.bhola@pushstart.in)
+Subject: AI Product Engineer Assignment - Navnath
 
 ---
 
-## 📑 1. Metafield & Metaobject Definitions
+## 1. Project Overview & Deliverables
 
-To ensure merchant editability and separation of concerns from Liquid templates, the following standard definitions were created:
+- Development Store URL: https://dq15xu-0f.myshopify.com/
+- Storefront Password: purelane (or your set password)
+- GitHub Repository: https://github.com/[your-username]/purelane-shopify-dawn
+
+### Sections Shipped:
+1. Hero (`sections/purelane-hero.liquid`): 1, 2, and 3-stage interactive bottle showcase with live Shopify product data, dynamic pricing, and fallback vector assets.
+2. Shop Grid (`sections/purelane-shop.liquid`): Responsive 4-column product collection grid powered by reusable card snippets (`snippets/purelane-card.liquid`) and AJAX add-to-cart.
+3. Best-Selling Combos (`sections/purelane-combos.liquid`): Horizontal snap-scroll rail with hidden scrollbar and direct bundle variant checkout.
+4. Bundles (`sections/purelane-bundles.liquid`): 3-tier value architecture (Starter, Most Popular, Whole Home) with dynamic pricing and feature lists.
+5. Reviews Rail (`sections/purelane-reviews.liquid`): Continuous marquee testimonials with customizable customer review cards.
+6. Bonus Sections: Botanical Ingredients (`sections/purelane-ingredients.liquid`), Top Announcement Ticker (`sections/purelane-ticker.liquid`), Right-Side Section Progress Rail, and Floating Pill Header (`sections/purelane-header.liquid`) with active sliding underline indicator.
+
+---
+
+## 2. Metafield & Metaobject Architecture
+
+To keep content fully merchant-editable without touching Liquid code, the following metafields and metaobjects were defined:
 
 ```json
 {
@@ -47,7 +49,7 @@ To ensure merchant editability and separation of concerns from Liquid templates,
       "key": "bundle_savings_text",
       "type": "single_line_text_field",
       "name": "Bundle Discount Tag",
-      "description": "e.g., 'Save ₹398' or 'You save ₹448'"
+      "description": "Savings callout (e.g., 'Save Rs 398')"
     }
   ],
   "metaobjects": [
@@ -68,42 +70,42 @@ To ensure merchant editability and separation of concerns from Liquid templates,
 
 ---
 
-## 🛠️ 2. Short Notes on the Build
+## 3. Build Notes
 
-### What I Flagged in the Original Prototype File:
-1. **Conflicting Dual `<style>` Blocks**: The prototype loaded a dark theme (500+ lines) followed immediately by a light theme override and ~120 lines of orphaned PDP styles (e.g., `.crumb`, `.pin`, `.reassure`, `.acc`) not present on the homepage.
-2. **Duplicate Items & SVG ID Collisions**: The shop section repeated products 1–4 as items 5–8, but inlined raw SVG markup with duplicate IDs (`#gTAPb`, `#gKITb`), causing invalid DOM trees.
-3. **Severe Scroll Jank (Forced Reflow)**: The scroll listener ran a `while (el) { top += el.offsetTop; el = el.offsetParent; }` loop on every frame, causing catastrophic layout thrashing.
-4. **Accessibility Violations**: Heading levels jumped randomly (`h1` ➔ `h4` ➔ `h3` ➔ `h2`), color contrast was sub-standard on light backgrounds, and interactive buttons lacked accessible labels.
-5. **Theme Editor Fragility**: All JavaScript was wrapped in a static IIFE with orphaned `setInterval` timers that break on Shopify Section reloads (`shopify:section:load`).
+### Issues Identified in the Original Prototype:
+1. Conflicting CSS Blocks: The prototype contained two full `<style>` blocks (a dark theme followed by a light theme override) along with roughly 120 lines of unused PDP styles (`.crumb`, `.pin`, `.reassure`, `.acc`).
+2. Duplicate IDs and Inlined SVGs: The shop grid duplicated products 1-4 to make 5-8, carrying duplicate SVG gradient IDs (`#gTAPb`, `#gKITb`), which caused invalid DOM rendering.
+3. Scroll Performance & Layout Thrashing: The prototype recalculated `offsetTop` recursively on every single scroll event (`while (el) { top += el.offsetTop; el = el.offsetParent; }`), causing heavy browser reflows.
+4. Heading Hierarchy & Accessibility: Headings jumped arbitrarily from `h1` to `h4` and `h2`, and action buttons lacked accessible names for screen readers.
+5. Customizer Lifecycle: Vanilla scripts relied purely on `DOMContentLoaded`, which broke when sections were reloaded or reordered inside the Shopify theme editor.
 
-### What I Changed in the Code and Why:
-* **Consolidated CSS Tokens**: Unified into a single, clean `:root` design token architecture matching the Purelane light brand spec with WCAG AA compliant contrast ratios.
-* **Liquid & Schema Decoupling**: Converted hardcoded text/prices into dynamic Shopify schema settings, block repeaters, and collection pickers.
-* **Cached Coordinate Scroll Engine**: Replaced layout thrashing with pre-calculated offset arrays and `requestAnimationFrame` + `IntersectionObserver` transforms (steady 60fps).
-* **Reusable Card Architecture**: Extracted `.card` markup into `snippets/purelane-card.liquid` with graceful handling for sold-out products, long titles, and missing images.
-* **AJAX Cart Integration**: Connected "Add to Cart" and "Shop Bundle" buttons to Shopify's `/cart/add.js` API with animated feedback and header cart badge updates.
+### What Was Changed and Why:
+- Tokenized Design System: Consolidated all colors into a clean `:root` token set with a botanical green and teal palette (`#00706a`, `#092e28`, `#b8701c`) that satisfies WCAG AA contrast requirements.
+- Merchant-Editable Schemas: Extracted all hardcoded copy, prices, and products into Shopify Section settings, blocks, and product pickers.
+- Optimized Scroll Engine: Cached element offsets at initialization and window resize, running animations via `requestAnimationFrame` for stutter-free 60fps scrolling.
+- Reusable Card Snippets: Built `snippets/purelane-card.liquid` with automated fallbacks for sold-out states, missing images, and long product titles.
+- AJAX Cart Engine: Added 1-click cart addition via `/cart/add.js` with live cart counter updates and non-blocking toast feedback.
 
 ### What I Would Do with More Time:
-* Implement Shopify Subscriptions / Recharge API integration for recurring bundle deliveries.
-* Add predictive search and visual bundle-builder drawer allowing customers to drag-and-drop items into the 2/3/5 product box.
-* Build automated Visual Regression tests (Playwright) comparing live theme renders against the Figma/prototype spec at 375px, 768px, 1440px.
+- Implement a slide-out cart drawer with free shipping progress thresholds.
+- Add drag-and-drop bundle builder logic for custom product mixes.
+- Set up Playwright automated visual regression tests across 375px, 768px, and 1440px breakpoints.
 
 ---
 
-## 🤖 3. Short Notes on AI Workflow
+## 4. AI Workflow Notes
 
-### What I Delegated to AI:
-* **Static Code Audit & Pattern Detection**: Detecting dead CSS classes, duplicate SVG gradient IDs, and semantic heading skips.
-* **Product CSV Generation**: Automating Shopify CSV creation for 10 seed products with precise edge cases (sold-out item, long title, no-image item).
-* **Liquid Boilerplate & Schema Construction**: Generating robust JSON schemas with settings, presets, and block definitions for all 5 sections.
+### What Was Delegated to AI:
+- Rapid code auditing to spot dead CSS rules and duplicate SVG markup.
+- Seed CSV data generation with required edge cases (sold-out item, long title, no-image product).
+- Scaffolding Shopify schema definitions and Liquid section boilerplate.
 
-### Where AI Failed & Required Manual Intervention:
-* **Shopify Customizer Lifecycle**: AI initially generated standard vanilla JS event listeners (`DOMContentLoaded`) which failed when sections are re-rendered in the Shopify theme editor. I had to enforce `shopify:section:load` and `shopify:section:unload` event bindings.
-* **Mathematical Marquee Calculations**: AI generated CSS marquee with arbitrary percentage transforms that stuttered on window resize. I fixed the animation width calculations to ensure a seamless 50% translation loop.
-* **Contrast Compliance**: Generative color adjustments initially altered brand shades. I manually calibrated HSL color tokens to satisfy both brand aesthetics and WCAG AA 4.5:1 contrast standards.
+### Where AI Needed Correction:
+- Shopify Customizer Hooks: AI initially wrote standard window event listeners; I updated the implementation to hook into `shopify:section:load` and `shopify:section:unload`.
+- Continuous Marquee Math: AI-generated CSS transforms had small seam glitches on resize; I adjusted the translation math to guarantee seamless 50% looping.
+- Responsive Sizing: AI generated static aspect ratios that caused flex child collapse on smaller viewports; I added explicit min-dimensions and containment rules.
 
-### What I'd Systematise to Ship 20+ Client Projects at Scale:
-1. **Design-to-Liquid Section Transpiler**: A CLI tool that parses prototype HTML/CSS files, extracts color tokens into Dawn-compatible CSS variables, and outputs structured `.liquid` section skeletons.
-2. **Standardized DTC Metaobject Schema Library**: Pre-built Shopify CLI scripts to push standard bundle, combo, and review metaobjects to new dev stores via GraphQL Admin API in seconds.
-3. **Automated QA Agent Pipeline**: A GitHub Action running Lighthouse CI, a11y (axe-core), and responsive screenshot diffs on every theme commit before client delivery.
+### How to Systematize This for 20+ Client Projects:
+1. CLI Section Generator: A script to parse Figma/HTML prototypes and generate clean Liquid sections and schema definitions automatically.
+2. Shared Metaobject Library: Standardized GraphQL scripts to provision combo and review schemas in new dev stores instantly.
+3. Automated Quality Gate: GitHub Actions running Lighthouse CI, axe-core accessibility checks, and visual diff testing on every theme push.
