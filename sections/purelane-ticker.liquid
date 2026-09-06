@@ -1,0 +1,53 @@
+{{ 'purelane.css' | asset_url | stylesheet_tag }}
+
+<div class="ticker" id="purelaneTicker" aria-label="Store highlights">
+  <div class="track">
+    <span>Free shipping <b>on every bundle across India</b></span>
+    <span>100% plant-based <b>and non-toxic</b></span>
+    <span>Loved by <b>30,000+ happy homes</b></span>
+    <span>Buy 3 <b>at flat ₹499</b></span>
+    <span>Free shipping <b>on every bundle across India</b></span>
+    <span>100% plant-based <b>and non-toxic</b></span>
+    <span>Loved by <b>30,000+ happy homes</b></span>
+    <span>Buy 3 <b>at flat ₹499</b></span>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Purelane Ticker",
+  "tag": "section",
+  "class": "section-purelane-ticker",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text_1",
+      "label": "Announcement 1",
+      "default": "Free shipping on every bundle across India"
+    },
+    {
+      "type": "text",
+      "id": "text_2",
+      "label": "Announcement 2",
+      "default": "100% plant-based and non-toxic"
+    },
+    {
+      "type": "text",
+      "id": "text_3",
+      "label": "Announcement 3",
+      "default": "Loved by 30,000+ happy homes"
+    },
+    {
+      "type": "text",
+      "id": "text_4",
+      "label": "Announcement 4",
+      "default": "Buy 3 at flat ₹499"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane Ticker"
+    }
+  ]
+}
+{% endschema %}

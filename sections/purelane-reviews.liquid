@@ -1,0 +1,127 @@
+{{ 'purelane.css' | asset_url | stylesheet_tag }}
+
+<section class="sec revband purelane-section" id="reviews-{{ section.id }}" aria-labelledby="reviews-h-{{ section.id }}">
+  <div class="pl-wrap">
+    <div class="revhead">
+      <h2 id="reviews-h-{{ section.id }}" class="sr-only">{{ section.settings.heading | default: 'Customer Reviews' }}</h2>
+      <span class="pl-kicker">{{ section.settings.kicker | default: "That's what they said" }}</span>
+      <span class="agg"><span class="st" aria-hidden="true">★★★★★</span> <b>{{ section.settings.rating_score | default: '4.8' }}</b> from {{ section.settings.rating_count | default: '8,000+' }} reviews</span>
+      <span class="agg">Loved by <b>{{ section.settings.homes_count | default: '12 lakh+' }}</b> homes</span>
+    </div>
+  </div>
+  
+  <div class="pl-revrail" aria-label="Customer Testimonials Rail">
+    <div class="pl-revtrack">
+      {%- for block in section.blocks -%}
+        <article class="pl-glass-2 pl-rcard" {{ block.shopify_attributes }}>
+          <div class="st" aria-hidden="true">★★★★★</div>
+          <h3>{{ block.settings.title | escape }}</h3>
+          <p>{{ block.settings.review_text | escape }}</p>
+          <div class="who">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="m5 13 4 4L19 7"/></svg>
+            <b>{{ block.settings.author | escape }}</b>
+            <span>&middot; {{ block.settings.product_tag | escape }}</span>
+          </div>
+        </article>
+      {%- endfor -%}
+
+      {%- comment -%} Duplicate loop for continuous CSS marquee animation {%- endcomment -%}
+      {%- for block in section.blocks -%}
+        <article class="pl-glass-2 pl-rcard" aria-hidden="true">
+          <div class="st">★★★★★</div>
+          <h3>{{ block.settings.title | escape }}</h3>
+          <p>{{ block.settings.review_text | escape }}</p>
+          <div class="who">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 13 4 4L19 7"/></svg>
+            <b>{{ block.settings.author | escape }}</b>
+            <span>&middot; {{ block.settings.product_tag | escape }}</span>
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Purelane Reviews Rail",
+  "tag": "section",
+  "class": "section-purelane-reviews",
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker Text",
+      "default": "That's what they said"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading (Screen Readers)",
+      "default": "Customer Reviews & Ratings"
+    },
+    {
+      "type": "text",
+      "id": "rating_score",
+      "label": "Rating Score",
+      "default": "4.8"
+    },
+    {
+      "type": "text",
+      "id": "rating_count",
+      "label": "Review Count",
+      "default": "8,000+"
+    },
+    {
+      "type": "text",
+      "id": "homes_count",
+      "label": "Happy Homes Count",
+      "default": "12 lakh+"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Customer Review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Review Title",
+          "default": "Works like a charm"
+        },
+        {
+          "type": "textarea",
+          "id": "review_text",
+          "label": "Review Body",
+          "default": "Finally an eco option that cleans as well as the chemical detergent I used for years, and it smells better."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Customer Name",
+          "default": "Anita"
+        },
+        {
+          "type": "text",
+          "id": "product_tag",
+          "label": "Product Subtitle",
+          "default": "Laundry detergent"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane Reviews Rail",
+      "blocks": [
+        { "type": "review", "settings": { "title": "Works like a charm", "author": "Anita", "product_tag": "Laundry detergent" } },
+        { "type": "review", "settings": { "title": "Best dishwash ever", "author": "Priya", "product_tag": "Dishwash gel" } },
+        { "type": "review", "settings": { "title": "Great product & packaging", "author": "Sunita", "product_tag": "Liquid handwash" } },
+        { "type": "review", "settings": { "title": "Dog friendly formula", "author": "Rohit S.", "product_tag": "Floor cleaner" } },
+        { "type": "review", "settings": { "title": "Sparkling taps again", "author": "Verified buyer", "product_tag": "Tap cleaner" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

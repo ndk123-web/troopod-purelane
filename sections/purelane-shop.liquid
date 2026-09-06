@@ -1,0 +1,79 @@
+{{ 'purelane.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'purelane.js' | asset_url }}" defer></script>
+
+<section class="sec purelane-section" id="shop-{{ section.id }}" aria-labelledby="shop-h-{{ section.id }}">
+  <div class="pl-wrap">
+    <div class="pl-panel-head" style="text-align:center;margin-bottom:26px;">
+      <span class="pl-kicker">{{ section.settings.kicker | default: 'Bestsellers' }}</span>
+      <h2 class="pl-d2" id="shop-h-{{ section.id }}">{{ section.settings.heading | default: 'Loved by 30,000 homes' }}</h2>
+      <div class="pl-rule" aria-hidden="true">
+        <i></i>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21c0-6.5 3.5-11 8-12.5C20 15 16.5 20 12 21Z"/><path d="M12 21C12 14.5 8.5 10 4 8.5 4 15 7.5 20 12 21Z"/></svg>
+        <i></i>
+      </div>
+    </div>
+
+    <div class="pl-shelf">
+      {%- if section.settings.collection != blank and section.settings.collection.products.size > 0 -%}
+        {%- for product in section.settings.collection.products limit: section.settings.products_to_show -%}
+          {% render 'purelane-card', product_card_product: product %}
+        {%- endfor -%}
+      {%- elsif section.settings.product_list != blank and section.settings.product_list.count > 0 -%}
+        {%- for product in section.settings.product_list limit: section.settings.products_to_show -%}
+          {% render 'purelane-card', product_card_product: product %}
+        {%- endfor -%}
+      {%- else -%}
+        {%- comment -%} Default Fallback Cards if collection is empty {%- endcomment -%}
+        {%- for i in (1..8) -%}
+          {% render 'purelane-card', product_card_product: null %}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Purelane Product Grid",
+  "tag": "section",
+  "class": "section-purelane-shop",
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "Bestsellers"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Loved by 30,000 homes"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection to Show"
+    },
+    {
+      "type": "product_list",
+      "id": "product_list",
+      "label": "Or Select Specific Products"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 16,
+      "step": 2,
+      "label": "Products to Show",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane Product Grid"
+    }
+  ]
+}
+{% endschema %}

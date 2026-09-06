@@ -1,0 +1,81 @@
+{% comment %}
+  Renders a Purelane styled product card for the Shop and Shelf sections.
+  Accepts:
+  - product_card_product: {Object} Product Liquid object
+  - show_badge: {Boolean} Whether to show status badge
+  - custom_badge: {String} Optional custom badge text
+{% endcomment %}
+
+{%- if product_card_product and product_card_product != empty -%}
+  {%- assign variant = product_card_product.selected_or_first_available_variant -%}
+  <article class="pl-glass pl-card" data-product-id="{{ product_card_product.id }}">
+    <div class="pl-card-shot">
+      {%- if product_card_product.available == false -%}
+        <span class="pl-card-pill sold-out">Sold out</span>
+      {%- elsif custom_badge != blank -%}
+        <span class="pl-card-pill">{{ custom_badge }}</span>
+      {%- elsif product_card_product.compare_at_price > product_card_product.price -%}
+        <span class="pl-card-pill">Save {{ product_card_product.compare_at_price | minus: product_card_product.price | money_without_trailing_zeros }}</span>
+      {%- endif -%}
+
+      {%- if product_card_product.featured_image -%}
+        <img 
+          src="{{ product_card_product.featured_image | image_url: width: 340 }}"
+          alt="{{ product_card_product.featured_image.alt | default: product_card_product.title | escape }}"
+          loading="lazy"
+          width="170"
+          height="160"
+        >
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'pl-placeholder-svg' }}
+      {%- endif -%}
+    </div>
+
+    <h3>
+      <a href="{{ product_card_product.url }}" style="color:inherit;">
+        {{ product_card_product.title | truncate: 60 }}
+      </a>
+    </h3>
+
+    <div class="pl-card-rate">
+      <b>★ {{ product_card_product.metafields.reviews.rating.value | default: '4.8' }}</b>
+      <span>· {{ product_card_product.metafields.reviews.rating_count.value | default: '240' }} reviews</span>
+    </div>
+
+    <div class="pl-card-pr">
+      <strong>{{ product_card_product.price | money }}</strong>
+      {%- if product_card_product.compare_at_price > product_card_product.price -%}
+        <s>{{ product_card_product.compare_at_price | money }}</s>
+        <em>{{ product_card_product.compare_at_price | minus: product_card_product.price | times: 100 | divided_by: product_card_product.compare_at_price }}% off</em>
+      {%- endif -%}
+    </div>
+
+    {%- if product_card_product.available -%}
+      <button 
+        class="pl-btn pl-btn-ghost pl-btn-sm" 
+        type="button" 
+        data-pl-add-to-cart 
+        data-variant-id="{{ variant.id }}" 
+        data-product-title="{{ product_card_product.title | escape }}"
+        aria-label="Add {{ product_card_product.title | escape }} to cart"
+      >
+        Add to cart
+      </button>
+    {%- else -%}
+      <button class="pl-btn pl-btn-ghost pl-btn-sm" type="button" disabled aria-disabled="true">
+        Sold out
+      </button>
+    {%- endif -%}
+  </article>
+{%- else -%}
+  <article class="pl-glass pl-card">
+    <div class="pl-card-shot">
+      <span class="pl-card-pill">Sample</span>
+      {{ 'product-1' | placeholder_svg_tag }}
+    </div>
+    <h3>Purelane Plant Product</h3>
+    <div class="pl-card-rate"><b>★ 4.8</b> · 120 reviews</div>
+    <div class="pl-card-pr"><strong>₹200.00</strong><s>₹299.00</s><em>33% off</em></div>
+    <button class="pl-btn pl-btn-ghost pl-btn-sm" type="button">Add to cart</button>
+  </article>
+{%- endif -%}

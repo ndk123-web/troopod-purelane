@@ -1,0 +1,141 @@
+{
+  "sections": {
+    "ticker": {
+      "type": "purelane-ticker",
+      "settings": {
+        "text_1": "Free shipping on every bundle across India",
+        "text_2": "100% plant-based and non-toxic",
+        "text_3": "Loved by 30,000+ happy homes",
+        "text_4": "Buy 3 at flat ₹499"
+      }
+    },
+    "header": {
+      "type": "purelane-header",
+      "settings": {
+        "brand_name": "Purelane",
+        "tagline": "Clean, simply"
+      }
+    },
+    "hero": {
+      "type": "purelane-hero",
+      "settings": {
+        "heading": "Clean<br>That<br><span class=\"pl-lime\">Lasts</span>",
+        "subheading": "Homecare that works on the toughest grime, made from plants. Kind to your home, your family and the world outside it.",
+        "btn_primary_text": "Shop now",
+        "btn_primary_link": "#shop",
+        "btn_ghost_text": "How it works",
+        "btn_ghost_link": "#how",
+        "stage_1_label": "Single bottle",
+        "stage_1_price": "₹200",
+        "stage_1_compare": "₹299",
+        "stage_1_discount": "33% off",
+        "stage_2_label": "Any 2 products",
+        "stage_2_price": "₹349",
+        "stage_2_compare": "₹598",
+        "stage_2_discount": "Save ₹249",
+        "stage_3_label": "Any 3 products",
+        "stage_3_price": "₹499",
+        "stage_3_compare": "₹897",
+        "stage_3_discount": "Save ₹398"
+      }
+    },
+    "reviews": {
+      "type": "purelane-reviews",
+      "blocks": {
+        "review-1": {
+          "type": "review",
+          "settings": {
+            "title": "Works like a charm",
+            "review_text": "Finally an eco option that cleans as well as the chemical detergent I used for years, and it smells better.",
+            "author": "Anita",
+            "product_tag": "Laundry detergent"
+          }
+        },
+        "review-2": {
+          "type": "review",
+          "settings": {
+            "title": "Best dishwash ever",
+            "review_text": "Our old dishwash left my help with dry, cracked skin. That stopped completely after we switched.",
+            "author": "Priya",
+            "product_tag": "Dishwash gel"
+          }
+        },
+        "review-3": {
+          "type": "review",
+          "settings": {
+            "title": "Great product & packaging",
+            "review_text": "Very soft on hands with a lovely fragrance, and it feels good to be using far less plastic.",
+            "author": "Sunita",
+            "product_tag": "Liquid handwash"
+          }
+        },
+        "review-4": {
+          "type": "review",
+          "settings": {
+            "title": "Dog friendly formula",
+            "review_text": "We switched because chemical floor cleaners were setting off my dog's allergies. No reactions since.",
+            "author": "Rohit S.",
+            "product_tag": "Floor cleaner"
+          }
+        },
+        "review-5": {
+          "type": "review",
+          "settings": {
+            "title": "Sparkling taps again",
+            "review_text": "Hard water had ruined our bathroom fittings. Two sprays and the scale wipes straight off, no scrubbing.",
+            "author": "Verified buyer",
+            "product_tag": "Tap cleaner"
+          }
+        }
+      },
+      "block_order": [
+        "review-1",
+        "review-2",
+        "review-3",
+        "review-4",
+        "review-5"
+      ],
+      "settings": {
+        "kicker": "That's what they said",
+        "heading": "Customer Reviews & Ratings",
+        "rating_score": "4.8",
+        "rating_count": "8,000+",
+        "homes_count": "12 lakh+"
+      }
+    },
+    "combos": {
+      "type": "purelane-combos",
+      "settings": {
+        "kicker": "Pre-built to save you money",
+        "heading": "Best selling combos",
+        "subheading": "Swipe through the boxes people order most. Each one is already priced below buying the same products individually."
+      }
+    },
+    "bundles": {
+      "type": "purelane-bundles",
+      "settings": {
+        "kicker": "Build your bundle",
+        "heading": "One box. Every room.",
+        "subheading": "Mix and match across kitchen, laundry, home and skin. One flat price, no coupon code needed, free shipping included."
+      }
+    },
+    "shop": {
+      "type": "purelane-shop",
+      "settings": {
+        "kicker": "The entire range",
+        "heading": "Shop by bottle",
+        "subheading": "Single products when you need a top-up. Refills and starter bottles with triggers.",
+        "products_to_show": 8
+      }
+    }
+  },
+  "order": [
+    "ticker",
+    "header",
+    "hero",
+    "reviews",
+    "combos",
+    "bundles",
+    "shop"
+  ]
+}
